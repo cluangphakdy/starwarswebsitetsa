@@ -3,15 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Rotating Cube</title>
 </head>
 <body>
     <h1>Sigma Sigma Boy Sigma Boy </h1>
     <link rel="stylesheet" href="styles.css">
     <button id="toggleInstructions">Instructions </button>
     <div id="text" class="hidden"> INSTRUCTIONS INSTRUCTIONS INTRUCTIONS</div>
-    <script src="script.js"></script>
     <img src="face.jpg" alt="Face" width="250" height="250">
+
+    <script src="https://cdn.jsdelivr.net/npm/three-js@79.0.0/three.min.js"></script>
+    <script> 
+        const WIDTH = window.innerWidth;
+        const HEIGHT = window.innerHeight; 
+
+        // Renderer
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(WIDTH, HEIGHT);
+        renderer.setClearColor(0xdddddd, 1);
+        document.body.appendChild(renderer.domElement);
+
+        // Scene
+        const scene = new THREE.Scene();
+
+        // Camera
+        const camera = new THREE.PerspectiveCamera(70, WIDTH / HEIGHT, 0.1, 1000);  // Added near and far plane
+        camera.position.z = 30;  // Set camera position a bit further back
+        scene.add(camera);
+
+        // Create cube
+        const boxGeometry = new THREE.BoxGeometry(10, 10, 10);
+        const basicMaterial = new THREE.MeshBasicMaterial({ color: 0x0095dd });
+        const cube = new THREE.Mesh(boxGeometry, basicMaterial);
+        scene.add(cube);
+
+        // Render function with animation loop
+        function render() {
+            requestAnimationFrame(render);
+            
+            // Rotate cube in each frame
+            cube.rotation.x += 0.00;
+            cube.rotation.y += 0.01;
+
+            // Render the scene
+            renderer.render(scene, camera);
+        }
+
+        render();  // Start rendering
+
+    </script>
+
+    <script src="script.js"></script>
 </body>
 </html>
-<!-- Website URl is https://cluangphakdy.github.io/starwarswebsitetsa/ -->
