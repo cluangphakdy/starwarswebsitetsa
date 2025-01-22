@@ -10,4 +10,6 @@ toggleInstructions.addEventListener('click', function() {
  * -Three.js accepts .gtlf, .glb, .fbx, or .onj file types
  * -Making lightsaber parts in blender as of 1/15/25
  * -.gltF is the preferred and best file type for Three.js, so it is recommended to get models in that file type
+ * -download node.js 
+ * -use npm in command prompt ("npm install three-gltf-loader") and ("npm install three")
  */
