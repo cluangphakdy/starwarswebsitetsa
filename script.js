@@ -1,6 +1,6 @@
 const hiltParts = ['images/hilt 1.png', 'images/hilt 2.png', 'images/hilt 3.png'];
-const bladeParts = ['images/blade1.png', 'images/blade2.png', 'images/blade3.png'];
-const addonParts = ['images/addon1.png', 'images/addon2.png', 'images/addon3.png'];
+const bladeParts = ['images/blade 1.png', 'images/blade 2.png', 'images/blade 3.png'];
+const addonParts = ['images/addon 1.png', 'images/addon 2.png', 'images/addon 3.png'];
 
 let currentHiltIndex = 0;
 let currentBladeIndex = 0;
@@ -28,16 +28,16 @@ const previewCtx = previewCanvas.getContext('2d');
 
 // Canvas settings
 hiltCanvas.width = 300;
-hiltCanvas.height = 100;
+hiltCanvas.height = 150;
 
 bladeCanvas.width = 300;
-bladeCanvas.height = 100;
+bladeCanvas.height = 150;
 
 addonsCanvas.width = 300;
-addonsCanvas.height = 100;
+addonsCanvas.height = 150;
 
 previewCanvas.width = 300;
-previewCanvas.height = 300;
+previewCanvas.height = 450;  // Keep the original preview size
 
 // Load initial parts
 let currentHiltImage = new Image();
@@ -46,7 +46,7 @@ currentHiltImage.onload = () => drawImageFitting(hiltCtx, currentHiltImage);
 
 let currentBladeImage = new Image();
 currentBladeImage.src = bladeParts[currentBladeIndex];
-currentBladeImage.onload = () => drawImageWithColor(bladeCtx, currentBladeImage, bladeColorInput.value);
+currentBladeImage.onload = () => drawBlade(bladeCtx, currentBladeImage, bladeColorInput.value);
 
 let currentAddonImage = new Image();
 currentAddonImage.src = addonParts[currentAddonIndex];
@@ -55,7 +55,7 @@ currentAddonImage.onload = () => drawImageWithColor(addonsCtx, currentAddonImage
 // Function to draw image fitting within canvas
 function drawImageFitting(ctx, image) {
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-    
+
     const aspectRatio = image.width / image.height;
     let newWidth, newHeight;
 
@@ -74,10 +74,10 @@ function drawImageFitting(ctx, image) {
     updatePreview();
 }
 
-// Function to draw image with color overlay fitting within canvas
-function drawImageWithColor(ctx, image, color) {
+// Function to draw blade with color overlay fitting within canvas
+function drawBlade(ctx, image, color) {
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-    
+
     const aspectRatio = image.width / image.height;
     let newWidth, newHeight;
 
@@ -121,25 +121,47 @@ nextBladeBtn.addEventListener('click', () => {
     currentBladeImage.src = bladeParts[currentBladeIndex];
 });
 
-currentBladeImage.onload = () => drawImageWithColor(bladeCtx, currentBladeImage, bladeColorInput.value);
+currentBladeImage.onload = () => drawBlade(bladeCtx, currentBladeImage, bladeColorInput.value);
 
-// Event listeners for color change
+// Event listener for blade color change to update instantly
 bladeColorInput.addEventListener('input', (e) => {
-    drawImageWithColor(bladeCtx, currentBladeImage, e.target.value);
+    drawBlade(bladeCtx, currentBladeImage, e.target.value);
 });
 
+// Event listener for overall color change
 overallColorInput.addEventListener('input', (e) => {
     drawImageWithColor(addonsCtx, currentAddonImage, e.target.value);
     drawImageWithColor(hiltCtx, currentHiltImage, e.target.value);
-    drawImageWithColor(bladeCtx, currentBladeImage, e.target.value);
+    drawBlade(bladeCtx, currentBladeImage, bladeColorInput.value);
 });
 
 // Function to update preview
 function updatePreview() {
     previewCtx.clearRect(0, 0, previewCanvas.width, previewCanvas.height);
-    previewCtx.drawImage(addonsCanvas, 0, 0);   // Position addons at the top
-    previewCtx.drawImage(bladeCanvas, 0, 100);  // Position blade in the middle
-    previewCtx.drawImage(hiltCanvas, 0, 200);  // Position hilt at the bottom
+
+    const aspectRatio = currentBladeImage.width / currentBladeImage.height;
+    let bladeWidth, bladeHeight;
+    if (previewCanvas.width / aspectRatio <= previewCanvas.height) {
+        bladeWidth = previewCanvas.width;
+        bladeHeight = previewCanvas.width / aspectRatio;
+    } else {
+        bladeWidth = previewCanvas.height * aspectRatio;
+        bladeHeight = previewCanvas.height;
+    }
+
+    const bladeX = (previewCanvas.width - bladeWidth) / 2;
+    const bladeY = (previewCanvas.height - bladeHeight) / 4;  // Adjust position for better fit
+
+    // Draw addons in preview
+    previewCtx.drawImage(addonsCanvas, 0, 0, previewCanvas.width, previewCanvas.height / 9);
+
+    // Draw blade in preview with scaling and increased width if shoto blade
+    previewCtx.drawImage(bladeCanvas, bladeX, bladeY, bladeWidth, bladeHeight);
+
+    // Draw hilt in preview
+    const hiltX = (previewCanvas.width - hiltCanvas.width) / 2;
+    const hiltY = bladeY + bladeHeight - 50;  // Adjust position to fit nicely
+    previewCtx.drawImage(hiltCanvas, hiltX, hiltY, hiltCanvas.width, hiltCanvas.height);
 }
 
 // Event listener for saving the image
