@@ -1,18 +1,22 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Star+Jedi&display=swap');
+
 body {
-    font-family: Arial, sans-serif;
-    background-color: #202020;
-    color: white;
+    font-family: 'Roboto', sans-serif;
+    background-color: #1a1a1a;
+    color: #f0f0f0;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;  
+    height: 100vh;
     margin: 0;
     overflow: auto; /* Allow scrolling */
+    padding-top: 40px; /* Add padding to avoid content being hidden under the hotbar */
 }
 
 .container {
     display: flex;
-    flex-direction: row;
+    flex-direction: row; /* Ensure row direction */
     align-items: flex-start;
     width: 95%; /* Adjusted width */
     height: 95vh; /* Adjusted height */
@@ -23,7 +27,7 @@ body {
 }
 
 .left-section {
-    width: 55%; /* Adjusted width */
+    width: 65%; /* Adjusted width */
     border-right: 5px solid #555;
 }
 
@@ -55,11 +59,241 @@ canvas {
 }
 
 .right-section {
-    width: 45%; /* Adjusted width */
+    width: 35%; /* Adjusted width */
     padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .right-section canvas {
     width: 100%;
     height: auto;
+    max-height: 600px; /* Increased height */
 }
+
+#hilt-canvas, #blade-canvas, #addons-canvas {
+    width: 100px; /* Set a fixed width */
+    height: 100px; /* Set a fixed height */
+}
+
+#hotbar {
+    display: flex;
+    justify-content: space-around;
+    background-color: #333;
+    padding: 5px; /* Smaller padding */
+    position: fixed; /* Fix position at the top */
+    top: 0;
+    width: 100%;
+    z-index: 1000; /* Ensure it stays on top */
+}
+
+#hotbar button {
+    background-color: #444;
+    color: yellow; /* Yellow text */
+    border: none;
+    padding: 5px 10px; /* Smaller padding */
+    font-size: 12px; /* Smaller font size */
+    cursor: pointer;
+}
+
+#hotbar button:hover {
+    background-color: #555;
+}
+
+#home-section {
+    padding: 20px;
+    background-image: url('images/hyper.png');
+    background-size: cover;
+    background-position: center;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.star-wars-font {
+    font-family: 'Star Jedi', sans-serif;
+    color: yellow;
+    font-size: 48px;
+}
+
+.scroll-down {
+    font-size: 16px;
+    color: yellow;
+    margin-bottom: 10px;
+}
+
+#gallery-section {
+    padding: 20px;
+}
+
+#gallery-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 20px;
+}
+
+#storage-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 20px;
+}
+
+.gallery-item {
+    position: relative;
+    width: 150px;
+    height: 150px;
+    overflow: hidden;
+    border: 1px solid #333;
+}
+
+.gallery-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.gallery-item button {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background-color: transparent;
+    color: white;
+    border: none;
+    padding: 5px;
+    cursor: pointer;
+}
+
+.gallery-item button:hover {
+    color: red;
+}
+
+.centered {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1001;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.9);
+}
+
+.modal-content {
+    margin: auto;
+    display: block;
+    width: 80%;
+    max-width: 700px;
+}
+
+.close {
+    position: absolute;
+    top: 15px;
+    right: 35px;
+    color: #fff;
+    font-size: 40px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close:hover,
+.close:focus {
+    color: #bbb;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+#message-section {
+    margin-top: 20px;
+}
+
+#message-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 20px;
+    border: 1px solid #333;
+    background-color: #222;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.message {
+    background-color: #333;
+    padding: 10px;
+    border-radius: 5px;
+    position: relative;
+}
+
+.message img {
+    max-width: 100px;
+    max-height: 100px;
+    display: block;
+    margin-top: 10px;
+}
+
+.message .delete-btn {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background-color: transparent;
+    color: red;
+    border: none;
+    cursor: pointer;
+}
+
+#message-input {
+    width: 80%;
+    height: 50px;
+    margin-top: 10px;
+}
+
+.clip-logo {
+    cursor: pointer;
+    font-size: 24px;
+    margin-left: 10px;
+}
+
+#send-message {
+    margin-top: 10px;
+    padding: 10px 20px;
+    background-color: #555;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+#send-message:hover {
+    background-color: #777;
+}
+
+.help-button {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    width: 50px;
+    height: 50px;
+    background-color: #ffcc00;
+    border: none;
+    border-radius: 50%;
+    font-size: 24px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.help-button:hover {
+    background-color: #ffdd33;
+}
+
+
