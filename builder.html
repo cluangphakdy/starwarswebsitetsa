@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lightsaber Customizer</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="left-section">
+            <div id="hilt-customizer" class="panel">
+                <h2>Hilts</h2>
+                <button id="prev-hilt">←</button>
+                <canvas id="hilt-canvas"></canvas>
+                <button id="next-hilt">→</button>
+            </div>
+            <div id="blade-customizer" class="panel">
+                <h2>Blades</h2>
+                <button id="prev-blade">←</button>
+                <canvas id="blade-canvas"></canvas>
+                <button id="next-blade">→</button>
+                <div class="color-picker">
+                    <label for="blade-color-input">Blade Color:</label>
+                    <input type="color" id="blade-color-input" value="#ff0000">
+                </div>
+            </div>
+            <div id="addons-customizer" class="panel">
+                <h2>Addons</h2>
+                <canvas id="addons-canvas"></canvas>
+                <div class="color-picker">
+                    <label for="overall-color-input">Overall Color:</label>
+                    <input type="color" id="overall-color-input" value="#ffffff">
+                </div>
+            </div>
+        </div>
+        <div class="right-section">
+            <h2>Lightsaber Preview</h2>
+            <canvas id="preview-canvas"></canvas>
+            <button id="save-image">Save as PNG</button>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
