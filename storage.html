@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lightsaber Storage</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Hotbar for navigation -->
+    <div id="hotbar">
+        <button id="nav-home">Home</button>
+        <button id="nav-builder">Lightsaber Builder</button>
+        <button id="nav-gallery">Gallery</button>
+        <button id="nav-storage">Storage</button>
+    </div>
+
+    <div id="storage-section">
+        <h1 class="centered">Storage</h1>
+        <p class="centered">This is your private lightsaber storage. Click on a lightsaber to zoom in, download, or edit it.</p>
+        <div id="storage-container"></div>
+    </div>
+
+    <!-- Modal for zoomed image -->
+    <div id="modal" class="modal">
+        <span class="close">&times;</span>
+        <img class="modal-content" id="modal-image">
+        <div id="download-container" class="centered">
+            <button id="download-image">Download</button>
+            <button id="edit-image">Edit</button>
+        </div>
+    </div>
+
+    <button id="help-button" class="help-button">😠</button>
+
+    <script src="script.js"></script>
+</body>
+</html>
