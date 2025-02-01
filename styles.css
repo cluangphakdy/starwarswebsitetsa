@@ -477,3 +477,45 @@ canvas {
     max-width: 200px; /* Adjust the size of the logo */
     height: auto;
 }
+
+.text-shadow {
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7); /* Add drop shadow to text */
+}
+
+#sources-section {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.outlined-text {
+    color: #ffcc00; /* Change text color */
+    text-shadow: 
+        -1px -1px 0 #000,  
+        1px -1px 0 #000,
+        -1px 1px 0 #000,
+        1px 1px 0 #000; /* Add black outline */
+}
+
+.yellow-text {
+    color: yellow;
+}
+
+.smiley-button {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 50px;
+    height: 50px;
+    background-color: #ffcc00;
+    border: none;
+    border-radius: 50%;
+    font-size: 24px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.smiley-button:hover {
+    background-color: #ffdd33;
+}
