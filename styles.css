@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Star+Jedi&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Futura:wght@700&display=swap'); /* Import Futura Classic Bold */
 
 body {
     font-family: 'Roboto', sans-serif;
@@ -14,22 +15,33 @@ body {
     display: flex;
     flex-direction: row; /* Ensure row direction */
     align-items: flex-start;
+    justify-content: space-between; /* Add space between sections */
     width: 95%; /* Adjusted width */
-    height: 95vh; /* Adjusted height */
+    height: auto; /* Adjusted height */
+    margin: 0 auto; /* Center the container */
 }
 
-.left-section, .right-section {
+.left-section, .right-section, .logo-section {
     padding: 20px;
+    background-color: #2a2a2a; /* Add background color to sections */
+    border-radius: 10px; /* Add rounded corners */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Add shadow */
 }
 
 .left-section {
-    width: 65%; /* Adjusted width */
-    border-right: 5px solid #555;
+    width: 40%; /* Adjusted width */
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* Add gap between panels */
 }
 
 .panel {
     text-align: center;
     margin-bottom: 20px;
+    padding: 10px;
+    background-color: #333; /* Add background color to panels */
+    border-radius: 10px; /* Add rounded corners */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Add shadow */
 }
 
 button {
@@ -39,6 +51,7 @@ button {
     padding: 10px;
     margin: 0 10px;
     cursor: pointer;
+    border-radius: 5px; /* Add rounded corners */
 }
 
 button:hover {
@@ -48,6 +61,7 @@ button:hover {
 canvas {
     border: 1px solid #333;
     margin-top: 10px;
+    border-radius: 5px; /* Add rounded corners */
 }
 
 .color-picker {
@@ -60,6 +74,8 @@ canvas {
     display: flex;
     flex-direction: column;
     align-items: center;
+    position: relative; /* Adjusted position */
+    cursor: move; /* Change cursor to move */
 }
 
 .right-section canvas {
@@ -68,7 +84,19 @@ canvas {
     max-height: 600px; /* Increased height */
 }
 
-#hilt-canvas, #blade-canvas, #addons-canvas {
+.logo-section {
+    width: 20%; /* Adjusted width */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.logo-image {
+    max-width: 100%;
+    height: auto;
+}
+
+#hilt-canvas, #blade-canvas {
     width: 100px; /* Set a fixed width */
     height: 100px; /* Set a fixed height */
 }
@@ -118,12 +146,71 @@ canvas {
     z-index: -1;
 }
 
+.centered-logo {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    max-width: 400px; /* Increased size to 2x */
+    z-index: 1;
+}
+
 .star-wars-font {
     font-family: 'Star Jedi', sans-serif;
     color: yellow;
     font-size: 48px;
     position: relative;
     z-index: 1;
+    text-shadow: 0 0 10px yellow, 0 0 20px yellow, 0 0 30px yellow;
+}
+
+.futura-font {
+    font-family: 'Futura', sans-serif; /* Use Futura Classic Bold for title */
+    font-size: 60px; /* Make the title larger */
+}
+
+.red-glow {
+    color: yellow;
+    text-shadow: 0 0 10px red, 0 0 20px red, 0 0 30px red; /* Add red glow effect */
+}
+
+.blue-glow {
+    color: yellow;
+    text-shadow: 0 0 10px blue, 0 0 20px blue, 0 0 30px blue; /* Add blue glow effect */
+}
+
+.scrolling-text {
+    position: absolute;
+    bottom: 20px;
+    width: 100%;
+    text-align: center;
+    font-family: 'Star Jedi', sans-serif;
+    color: yellow; /* Change scrolling text to yellow */
+    font-size: 20px; /* Increased font size */
+    font-weight: bold; /* Make text bold */
+    line-height: 1.5; /* Better line spacing */
+    animation: scroll 20s linear infinite;
+    mask-image: linear-gradient(to top, transparent, black 60%, black 95%, transparent);
+    -webkit-mask-image: linear-gradient(to top, transparent, black 60%, black 95%, transparent);
+    z-index: 2; /* Ensure it is above the logo */
+    text-shadow: 0 0 10px yellow, 0 0 20px yellow, 0 0 30px yellow; /* Add glow effect */
+}
+
+.bold-text {
+    font-weight: bold;
+    text-shadow: 0 0 10px yellow, 0 0 20px yellow, 0 0 30px yellow; /* Add strong glow effect */
+}
+
+@keyframes scroll {
+    0% {
+        transform: translateY(100%);
+    }
+    90% {
+        transform: translateY(-100%);
+    }
+    100% {
+        transform: translateY(100%);
+    }
 }
 
 .scroll-down {
@@ -134,6 +221,11 @@ canvas {
 
 #gallery-section {
     padding: 20px;
+    background-image: url('images/hyper.png'); /* Change background to hyper.png */
+    background-size: cover;
+    background-position: center;
+    width: 100vw; /* Extend to full width */
+    height: 100vh; /* Extend to full height */
 }
 
 #gallery-container {
@@ -156,6 +248,7 @@ canvas {
     height: 150px;
     overflow: hidden;
     border: 1px solid #333;
+    background-color: #2a2a2a; /* Set background color to grey */
 }
 
 .gallery-item img {
@@ -303,32 +396,6 @@ canvas {
 .help-button:hover {
     background-color: #ffdd33;
 }
-.full-page-background {
-    background-image: url('images/home bg.png');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-}
-.help-button:hover {
-    background-color: #ffdd33;
-}
-
-.full-page-background {
-    background-image: url('images/home bg.png');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-}
 
 .full-page-background {
     background-image: url('images/home bg.png');
@@ -343,11 +410,70 @@ canvas {
 }
 
 .gradient-text {
-    background: linear-gradient(to right, pink, #ff69b4, lavender);
+    background: linear-gradient(to right, white, white, lavender); /* Change title to white */
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     text-shadow: 
-        0 0 2px rgba(255, 182, 193, 0.5), /* pink */
-        0 0 4px rgba(255, 105, 180, 0.5), /* rose */
+        0 0 2px rgba(255, 255, 255, 0.5), /* white */
+        0 0 4px rgba(255, 255, 255, 0.5), /* white */
         0 0 6px rgba(230, 230, 250, 0.5); /* lavender */
+}
+
+.popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #333;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    z-index: 1001;
+}
+
+.popup-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.popup-content label {
+    color: #f0f0f0;
+    margin-bottom: 10px;
+}
+
+.popup-content input {
+    padding: 10px;
+    margin-bottom: 10px;
+    border: none;
+    border-radius: 5px;
+}
+
+.popup-content button {
+    background-color: #555;
+    border: none;
+    color: white;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.popup-content button:hover {
+    background-color: #777;
+}
+
+.logo-top {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    background-color: #2a2a2a; /* Add background color */
+    border-radius: 10px; /* Add rounded corners */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Add shadow */
+    margin-bottom: 20px; /* Add margin at the bottom */
+}
+
+.logo-image {
+    max-width: 200px; /* Adjust the size of the logo */
+    height: auto;
 }
