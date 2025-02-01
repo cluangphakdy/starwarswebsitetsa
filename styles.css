@@ -5,10 +5,6 @@ body {
     font-family: 'Roboto', sans-serif;
     background-color: #1a1a1a;
     color: #f0f0f0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
     margin: 0;
     overflow: auto; /* Allow scrolling */
     padding-top: 40px; /* Add padding to avoid content being hidden under the hotbar */
@@ -103,19 +99,31 @@ canvas {
 
 #home-section {
     padding: 20px;
-    background-image: url('images/hyper.png');
-    background-size: cover;
-    background-position: center;
     height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
+    position: relative;
+}
+
+.image-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('home bg.png');
+    background-size: cover;
+    background-position: center;
+    z-index: -1;
 }
 
 .star-wars-font {
     font-family: 'Star Jedi', sans-serif;
     color: yellow;
     font-size: 48px;
+    position: relative;
+    z-index: 1;
 }
 
 .scroll-down {
@@ -295,5 +303,51 @@ canvas {
 .help-button:hover {
     background-color: #ffdd33;
 }
+.full-page-background {
+    background-image: url('images/home bg.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+.help-button:hover {
+    background-color: #ffdd33;
+}
 
+.full-page-background {
+    background-image: url('images/home bg.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
 
+.full-page-background {
+    background-image: url('images/home bg.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.gradient-text {
+    background: linear-gradient(to right, pink, #ff69b4, lavender);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 
+        0 0 2px rgba(255, 182, 193, 0.5), /* pink */
+        0 0 4px rgba(255, 105, 180, 0.5), /* rose */
+        0 0 6px rgba(230, 230, 250, 0.5); /* lavender */
+}
