@@ -1,10 +1,8 @@
 const hiltParts = ['images/hilt 1.png', 'images/hilt 2.png', 'images/hilt 3.png', 'images/hilt 4.png'];
 const bladeParts = ['images/blade 1.png', 'images/blade 2.png', 'images/blade 3.png'];
-const addonParts = ['images/addon 1.png', 'images/addon 2.png', 'images/addon 3.png'];
 
 let currentHiltIndex = 0;
 let currentBladeIndex = 0;
-let currentAddonIndex = 0;
 
 let editingStorageItem = null; // Track the item being edited
 
@@ -20,11 +18,8 @@ const bladeColorInput = document.getElementById('blade-color-input');
 const bladeCanvas = document.getElementById('blade-canvas');
 const bladeCtx = bladeCanvas.getContext('2d');
 
-const overallColorInput = document.getElementById('overall-color-input');
 const saveImageBtn = document.getElementById('save-image');
 const saveToStorageBtn = document.getElementById('save-to-storage');
-const addonsCanvas = document.getElementById('addons-canvas');
-const addonsCtx = addonsCanvas.getContext('2d');
 
 const previewCanvas = document.getElementById('preview-canvas');
 const previewCtx = previewCanvas.getContext('2d');
@@ -69,9 +64,6 @@ hiltCanvas.height = 150;
 bladeCanvas.width = 300;
 bladeCanvas.height = 150;
 
-addonsCanvas.width = 300;
-addonsCanvas.height = 150;
-
 previewCanvas.width = 300;
 previewCanvas.height = 450;  // Keep the original preview size
 
@@ -83,10 +75,6 @@ currentHiltImage.onload = () => drawImageFitting(hiltCtx, currentHiltImage);
 let currentBladeImage = new Image();
 currentBladeImage.src = bladeParts[currentBladeIndex];
 currentBladeImage.onload = () => drawBlade(bladeCtx, currentBladeImage, bladeColorInput.value);
-
-let currentAddonImage = new Image();
-currentAddonImage.src = addonParts[currentAddonIndex];
-currentAddonImage.onload = () => drawImageWithColor(addonsCtx, currentAddonImage, overallColorInput.value);
 
 function updatePreview() { 
     previewCtx.clearRect(0, 0, previewCanvas.width, previewCanvas.height); 
@@ -102,8 +90,6 @@ function updatePreview() {
     const bladeX = (previewCanvas.width - bladeWidth) / 2; 
     const bladeY = (previewCanvas.height - bladeHeight) / 4; 
     // Adjust position for better fit 
-    // Draw addons in preview 
-    previewCtx.drawImage(addonsCanvas, 0, 0, previewCanvas.width, previewCanvas.height / 9); 
     // Draw blade in preview with scaling and increased width if shoto blade
     previewCtx.drawImage(bladeCanvas, bladeX, bladeY, bladeWidth, bladeHeight); 
     // Draw hilt in preview 
@@ -352,6 +338,21 @@ editImageBtn.addEventListener('click', () => {
 // Load storage images from localStorage on page load
 window.addEventListener('load', loadStorageFromLocalStorage);
 
+// Firebase configuration
+const firebaseConfig = {
+    apiKey: "YOUR_API_KEY",
+    authDomain: "YOUR_AUTH_DOMAIN",
+    databaseURL: "YOUR_DATABASE_URL",
+    projectId: "YOUR_PROJECT_ID",
+    storageBucket: "YOUR_STORAGE_BUCKET",
+    messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+    appId: "YOUR_APP_ID"
+};
+
+// Initialize Firebase
+const app = firebase.initializeApp(firebaseConfig);
+const database = firebase.database();
+
 const messageContainer = document.getElementById('message-container');
 const messageInput = document.getElementById('message-input');
 const messageImageInput = document.getElementById('message-image');
@@ -364,28 +365,11 @@ function generateUsername() {
     return 'User' + Math.floor(Math.random() * 10000);
 }
 
-// Function to save messages to localStorage
-function saveMessagesToLocalStorage() {
-    const messages = [];
-    messageContainer.querySelectorAll('.message').forEach(message => {
-        const username = message.querySelector('.username').innerText;
-        const text = message.querySelector('.text').innerText;
-        const imgSrc = message.querySelector('img') ? message.querySelector('img').src : null;
-        messages.push({ username, text, imgSrc });
-    });
-    localStorage.setItem('messages', JSON.stringify(messages));
-}
-
-// Function to load messages from localStorage
-function loadMessagesFromLocalStorage() {
-    const messages = JSON.parse(localStorage.getItem('messages')) || [];
-    messages.forEach(({ username, text, imgSrc }) => addMessageToContainer(username, text, imgSrc));
-}
-
 // Function to add message to container
-function addMessageToContainer(username, text, imgSrc) {
+function addMessageToContainer(username, text, imgSrc, messageId) {
     const message = document.createElement('div');
     message.classList.add('message');
+    message.setAttribute('data-id', messageId);
 
     const usernameDiv = document.createElement('div');
     usernameDiv.classList.add('username');
@@ -400,7 +384,8 @@ function addMessageToContainer(username, text, imgSrc) {
     deleteBtn.innerText = '🗑️';
     deleteBtn.addEventListener('click', () => {
         message.remove();
-        saveMessagesToLocalStorage();
+        // Remove message from Firebase
+        firebase.database().ref('messages/' + messageId).remove();
     });
 
     message.appendChild(usernameDiv);
@@ -412,35 +397,87 @@ function addMessageToContainer(username, text, imgSrc) {
     }
     message.appendChild(deleteBtn);
     messageContainer.appendChild(message);
-    saveMessagesToLocalStorage();
+}
+
+// Function to send message
+function sendMessage(username, text, imgSrc) {
+    const newMessageRef = firebase.database().ref('messages').push();
+    newMessageRef.set({
+        username: username,
+        text: text,
+        imgSrc: imgSrc
+    });
+}
+
+// Function to show username popup
+function showUsernamePopup(callback) {
+    const popup = document.createElement('div');
+    popup.classList.add('popup');
+
+    const popupContent = document.createElement('div');
+    popupContent.classList.add('popup-content');
+
+    const usernameLabel = document.createElement('label');
+    usernameLabel.innerText = 'Create Username:';
+
+    const usernameInput = document.createElement('input');
+    usernameInput.type = 'text';
+    usernameInput.value = generateUsername();
+
+    const sendButton = document.createElement('button');
+    sendButton.innerText = 'Send';
+    sendButton.addEventListener('click', () => {
+        const username = usernameInput.value;
+        if (username) {
+            localStorage.setItem('username', username);
+            document.body.removeChild(popup);
+            callback(username);
+        }
+    });
+
+    popupContent.appendChild(usernameLabel);
+    popupContent.appendChild(usernameInput);
+    popupContent.appendChild(sendButton);
+    popup.appendChild(popupContent);
+    document.body.appendChild(popup);
 }
 
 // Event listener for send message button
 sendMessageBtn.addEventListener('click', () => {
     const text = messageInput.value;
     const file = messageImageInput.files[0];
-    const username = prompt("Enter your username:", generateUsername());
+    let username = localStorage.getItem('username');
+    if (!username) {
+        showUsernamePopup((username) => {
+            sendMessageWithUsername(username, text, file);
+        });
+    } else {
+        sendMessageWithUsername(username, text, file);
+    }
+});
+
+function sendMessageWithUsername(username, text, file) {
     if (text || file) {
-        if (file && file.type === 'image/png') {
+        if (file && file.type.startsWith('image/')) {
             const reader = new FileReader();
             reader.onload = (e) => {
-                addMessageToContainer(username, text, e.target.result);
+                sendMessage(username, text, e.target.result);
                 attachedImageContainer.style.display = 'none';
                 attachedImage.src = '';
             };
             reader.readAsDataURL(file);
         } else {
-            addMessageToContainer(username, text, null);
-        }
+            sendMessage(username, text, null);
+        }a
         messageInput.value = '';
         messageImageInput.value = '';
     }
-});
+}
 
 // Event listener to show the attached image in the message box
 messageImageInput.addEventListener('change', (event) => {
     const file = event.target.files[0];
-    if (file && file.type === 'image/png') {
+    if (file && file.type.startsWith('image/')) {
         const reader = new FileReader();
         reader.onload = (e) => {
             attachedImage.src = e.target.result;
@@ -450,8 +487,11 @@ messageImageInput.addEventListener('change', (event) => {
     }
 });
 
-// Load messages from localStorage on page load
-window.addEventListener('load', loadMessagesFromLocalStorage);
+// Load messages from Firebase on page load
+firebase.database().ref('messages').on('child_added', (snapshot) => {
+    const message = snapshot.val();
+    addMessageToContainer(message.username, message.text, message.imgSrc, snapshot.key);
+});
 
 const helpButton = document.getElementById('help-button');
 const helpButtonStorage = document.getElementById('help-button-storage');
@@ -465,3 +505,36 @@ helpButton.addEventListener('click', () => {
 helpButtonStorage.addEventListener('click', () => {
     alert('For help, please contact: 941-334-1569');
 });
+
+// Make the lightsaber preview canvas draggable
+const draggablePreview = document.getElementById('draggable-preview');
+
+draggablePreview.onmousedown = function(event) {
+    let shiftX = event.clientX - draggablePreview.getBoundingClientRect().left;
+    let shiftY = event.clientY - draggablePreview.getBoundingClientRect().top;
+
+    draggablePreview.style.position = 'absolute';
+    draggablePreview.style.zIndex = 1000;
+
+    function moveAt(pageX, pageY) {
+        draggablePreview.style.left = pageX - shiftX + 'px';
+        draggablePreview.style.top = pageY - shiftY + 'px';
+    }
+
+    moveAt(event.pageX, event.pageY);
+
+    function onMouseMove(event) {
+        moveAt(event.pageX, event.pageY);
+    }
+
+    document.addEventListener('mousemove', onMouseMove);
+
+    draggablePreview.onmouseup = function() {
+        document.removeEventListener('mousemove', onMouseMove);
+        draggablePreview.onmouseup = null;
+    };
+};
+
+draggablePreview.ondragstart = function() {
+    return false;
+};
