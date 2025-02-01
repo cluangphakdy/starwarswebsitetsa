@@ -23,4 +23,33 @@ document.addEventListener('DOMContentLoaded', () => {
             deleteButton.textContent = 'Delete';
             deleteButton.addEventListener('click', () => {
                 lightsabers.splice(index, 1);
-                localStorage.setItem('lightsabers', JSON
+                localStorage.setItem('lightsabers', JSON.stringify(lightsabers));
+                displayLightsabers();
+            });
+
+            div.appendChild(img);
+            div.appendChild(name);
+            div.appendChild(deleteButton);
+            gallery.appendChild(div);
+        });
+    }
+
+    displayLightsabers();
+
+    uploadButton.addEventListener('click', () => {
+        const file = uploadInput.files[0];
+        if (file && file.type.startsWith('image/')) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const lightsaber = {
+                    name: file.name,
+                    image: e.target.result
+                };
+                lightsabers.push(lightsaber);
+                localStorage.setItem('lightsabers', JSON.stringify(lightsabers));
+                displayLightsabers();
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+});
